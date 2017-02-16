@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Pathfinding.Serialization.JsonFx;
 using Pathfinding.Serialization;
 using Pathfinding;
+using UnityEngine.Profiling;
 
 
 namespace Pathfinding {
