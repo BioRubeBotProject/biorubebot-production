@@ -1,49 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class TimeScale : MonoBehaviour {
-	private static float saveTimeScale;
+	private static float savedTimeScale;
 
 	public void Start()
 	{
+        //Pause game when scene loads
 		Time.timeScale = 0;
+
+        //Set savedTimeScale to 1 so 'PlayButton' will operate correctly 
+        savedTimeScale = 1.0f;
 	}
 
 	public void PlayButton()
 	{
-		//Set TimeScale to 1, regardless of current state
-		Time.timeScale = 1.0f;
+        //IF game is paused THEN set timeScale to saved time
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = savedTimeScale;
+        }
+
+        //IF timeScale is '2' THEN set timeScale to '1'
+        else if (Time.timeScale == 2)
+        {
+            Time.timeScale = 1.0f;
+        }
 	}
 
 	public void PauseButton()
 	{
-		if (Time.timeScale > 0) {//Save our time scale to return to later, and then set to 0
-			saveTimeScale = Time.timeScale;
-			Time.timeScale = 0;
-		} 
-		else {
-			Time.timeScale = saveTimeScale;//Return the timeScale to the original value
-		}
-
+        //IF game is NOT paused THEN save time and pause game
+        if (Time.timeScale != 0)
+        {
+            savedTimeScale = Time.timeScale;
+            Time.timeScale = 0;
+        }
 	}
 
-	public void FastForwardButton() {
+	public void FastForwardButton() 
+    {
+        //IF timeScale is not 2 THEN double speed to 2 AND save time
+        if (Time.timeScale != 2)
+        {
+            Time.timeScale = 2;
+            savedTimeScale = Time.timeScale;
+        }
 
-		//When TimeScale = 1, TimeScale will Scale to 2
-		//Depreciated comment, When TimeScale = 2, TimeScale will Scale to 4
-		//Any TimeScale >= 2, does not compute
-		//Change to Time.timeScale <= 2 to make maximum 4, currently allows objects to break through coliders on the membrane
-		if (Time.timeScale >= 1 && Time.timeScale < 2) {
-			Time.timeScale = Time.timeScale + Time.timeScale;
-		}
-		//Not user friendly TimeScale Modification
-		else if(Time.timeScale > 2) {
-			Time.timeScale = Time.timeScale / 2;
-		}
+        //IF timeScale is 2 THEN restore speed to 1 AND save time
+        else if (Time.timeScale == 2)
+        {
+            Time.timeScale = 1.0f;
+            savedTimeScale = Time.timeScale;
+
+            //Remove highlight from button
+            EventSystem.current.SetSelectedGameObject(null);
+        }
 	}
 
-  public void ResetTime() {
-    saveTimeScale = 0;
-    Time.timeScale = 0;
+  public void ResetTime() 
+  {
+      //Pause game and set savedTime to 1 so play button will work correctly
+      Time.timeScale = 0;
+      savedTimeScale = 1;
   }
 }
