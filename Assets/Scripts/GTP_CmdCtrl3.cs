@@ -49,13 +49,23 @@ public class GTP_CmdCtrl3: MonoBehaviour
 			
 			else if (!docked)
 			{
-				if ((delay += Time.deltaTime) < 5)//wait 5 seconds before proceeding to target
-					Roam.Roaming (this.gameObject);
-				else {
+                //wait 5 seconds before proceeding to target
+                if ((delay += Time.deltaTime) < 5)
+                {
+                    Roam.Roaming(this.gameObject);
+                }
+					
+				else
+                {
 					//docked = ProceedToTarget();
 					docked = Roam.ProceedToVector(this.gameObject,dockingPosition);
 				}
-				if (docked)	Cloak ();
+
+				if (docked)
+                {
+                    Cloak();
+                }
+                    
 			}
 		}
 	}
@@ -97,7 +107,8 @@ public class GTP_CmdCtrl3: MonoBehaviour
 		//check to see how close to the g-protein and disable collider when close
 		deltaDistance = Vector3.Distance (transform.position, dockingPosition);
 		//once in range, station object at docking position
-		if (deltaDistance < _speed * Time.deltaTime) {
+		if (deltaDistance < _speed * Time.deltaTime)
+        {
 			transform.GetComponent<CircleCollider2D> ().enabled = false;
 			transform.GetComponent<Rigidbody2D>().isKinematic = true;
 			transform.position = dockingPosition;

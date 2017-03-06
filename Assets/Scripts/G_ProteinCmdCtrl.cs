@@ -29,9 +29,11 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 	
 	private void Start()
 	{
-        //Set kinematic off         (David   03/05)
-        transform.GetComponent<Rigidbody2D>().isKinematic = false;
-        
+        //test
+        transform.GetComponent<BoxCollider2D>().enabled = true;
+
+
+
         lastPosition = transform.position;
 		
 		//Instantiate a GDP child to tag along
@@ -58,19 +60,37 @@ public class G_ProteinCmdCtrl : MonoBehaviour
             //Receptor phosphate = closest one to G-Protein
 			openTarget = Roam.FindClosest (transform, "ReceptorPhosphate");
 
+
             //IF phosphate is found
 			if (openTarget != null)
             {  
+
+
                 //Stop movement and set to kinematic   (David 03/05)
-                if(transform.GetComponent<Rigidbody2D>().isKinematic == false)
-                {
-                    transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;                 
-                    transform.GetComponent<Rigidbody2D>().isKinematic = true;
-                }
+                //if(transform.GetComponent<Rigidbody2D>().isKinematic == false)
+                //{
+                //    transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                //    transform.GetComponent<BoxCollider2D>().enabled = true;             
+                //    transform.GetComponent<Rigidbody2D>().isKinematic = true;
+
+                //    //transform.GetComponent<CircleCollider2D>().enabled = false;
+                   
+                //}
                                                                
                 myTarget = openTarget.transform;
 				dockingPosition = GetOffset ();
 				LockOn ();  //call dibs
+
+
+
+
+
+
+
+
+
+
+
 			}
 
 		}
@@ -200,12 +220,20 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 		//check to see how close to the phosphate and disable collider when close
 		deltaDistance = Vector3.Distance (transform.position, dockingPosition);
 
+
+
 		//once in range, station object at docking position
-		if (deltaDistance < _speed * .5f)
+		if (deltaDistance < _speed * .5f)                                   //ORIGINAL      if (deltaDistance < _speed * .5f)
         {
-			transform.GetComponent<BoxCollider2D> ().enabled = false;             
-			transform.GetComponent<Rigidbody2D> ().isKinematic = true;           
+            //TEST
+            transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            //transform.GetComponent<CircleCollider2D>().enabled = false;
+            //transform.GetComponent<BoxCollider2D>().enabled = false;
+            transform.GetComponent<Rigidbody2D>().isKinematic = true;
+             
 		}
+
+
 
 		if (deltaDistance < _speed * Time.deltaTime)
         {
