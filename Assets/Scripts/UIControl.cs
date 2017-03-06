@@ -5,6 +5,6 @@ public class UIControl : MonoBehaviour
 {
 	public void ChangeScene(string sceneName)
 	{
-		Application.LoadLevel (sceneName);
+		Application.LoadLevel(sceneName);
 	}
 }

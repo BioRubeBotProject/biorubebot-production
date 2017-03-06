@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GDP_CmdCtrl : MonoBehaviour {
+public class GDP_CmdCtrl : MonoBehaviour
+{
 
 	public ParticleSystem destructionEffect;	// 'poof' special effect for 'expended' GDP
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 	
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
-		if (tag == "ReleasedGDP") {
+	void FixedUpdate ()
+    {
+		if (tag == "ReleasedGDP")
+        {
 			tag = "DyingGDP";
 			StartCoroutine (ReleasingGDP ());
 			StartCoroutine (DestroyGDP ()); //Destroy GDP
@@ -29,6 +33,7 @@ public class GDP_CmdCtrl : MonoBehaviour {
 		transform.GetComponent<Rigidbody2D> ().isKinematic = false;
 		transform.GetComponent<CircleCollider2D> ().enabled = true;
 	} 
+
 	//	6 seconds after the GDP is released it will be destroyed in a puff of smoke (of sorts)
 	public IEnumerator DestroyGDP()
 	{
@@ -40,4 +45,5 @@ public class GDP_CmdCtrl : MonoBehaviour {
 		Destroy(explosionEffect.gameObject, explosionEffect.duration);
 		Destroy(gameObject);
 	}
+
 }

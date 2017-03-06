@@ -3,8 +3,8 @@ using System.Collections;
 
 public class G_ProteinCmdCtrl : MonoBehaviour
 {
-	private static float _speed = 5f;	
-		
+	private static float _speed = 5f;
+
 	public GameObject GDP;				// for use creating a child of this object
 	private GameObject childGDP = null;
 	private GameObject Kinase;
@@ -29,7 +29,10 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 	
 	private void Start()
 	{
-		lastPosition = transform.position;
+        //Set kinematic off         (David   03/05)
+        transform.GetComponent<Rigidbody2D>().isKinematic = false;
+        
+        lastPosition = transform.position;
 		
 		//Instantiate a GDP child to tag along
 		childGDP = (GameObject)Instantiate (GDP, transform.position + new Vector3(2.2f, 0.28f, 0), Quaternion.identity);
@@ -42,72 +45,102 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+      
+        //IF G-Protein does not have a GTP(red) AND it does have GDP(blue)
 		if (!haveGTP && transform.tag == "OccupiedG_Protein")
         {
             haveGTP = true;
         }
-		if (!targeting && !docked && !haveGTP) 
+			
+        //IF G-Protein is not targeting a phosphate AND G-Protein is not docked to receptor AND G-Protein does not have a GTP(red)
+        if (!targeting && !docked && !haveGTP)
         {
-            //Look for a target
+            //Receptor phosphate = closest one to G-Protein
 			openTarget = Roam.FindClosest (transform, "ReceptorPhosphate");
 
-			if (openTarget != null) 
-            {
-				myTarget = openTarget.transform;
-				dockingPosition = GetOffset();
-				LockOn();//call dibs
+            //IF phosphate is found
+			if (openTarget != null)
+            {  
+                //Stop movement and set to kinematic   (David 03/05)
+                if(transform.GetComponent<Rigidbody2D>().isKinematic == false)
+                {
+                    transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;                 
+                    transform.GetComponent<Rigidbody2D>().isKinematic = true;
+                }
+                                                               
+                myTarget = openTarget.transform;
+				dockingPosition = GetOffset ();
+				LockOn ();  //call dibs
 			}
-		} 
-        else if (!docked && !haveGTP) 
+
+		}
+
+        //ELSE IF G-Protein is not docked to receptor AND G-Protein does not have a GTP(red)                *On route to receptor phosphate
+        else if (!docked && !haveGTP)
         {
-			if ((delay += Time.deltaTime) > 5) 
+           
+			docked = ProceedToTarget ();
+			
+			if (docked)
             {
-                //wait 5 seconds before proceeding to target
-				docked = ProceedToTarget();
-			}
-			if (docked) 
-            {
-				ReleaseGDP();
+				ReleaseGDP ();
 			}
 		}
-		if (haveGTP && !roaming && (delay += Time.deltaTime) > 2) 
-        {
-            //wait 2 seconds before undocking
-			Undock();
-		} 
-        else if (haveGTP && roaming) 
-        {
-			/*if (Kinase == null) {
-				Kinase = Roam.FindClosest (transform, "Kinase");
-			}
 
-			if (Kinase != null || myTarget != null) {
+        //IF G-Protein has GTP(red) AND G-Protein is not ready to roam with attached GTP(red) AND wait time is over 2 seconds
+        if (haveGTP && !roaming && (delay += Time.deltaTime) > 2)
+        {
+			Undock ();
+		}
+
+
+
+        //ELSE IF G-Protein has GTP(red) AND G-Protein is ready to roam with attached GTP(red)
+        else if (haveGTP && roaming)
+        {
+			/*
+            if (Kinase == null) 
+            {
+				Kinase = Roam.FindClosest (transform, "Kinase");
+		    }
+
+			if (Kinase != null || myTarget != null) 
+            {
 				Roam.FindAndWait (Kinase.GetComponent<KinaseCmdCtrl> (), this.gameObject, ref myTarget, ref delay, "Kinase_Prep_A");
-				if (myTarget != null && (delay) >= 5) {
+				if (myTarget != null && (delay) >= 5) 
+                {
 
 				}
-			} else {
+			}
+             
+            else 
+            {
 				Roam.Roaming (this.gameObject);
-				}*/
+			}
+            */
 
 			GameObject Kinase = Roam.FindClosest (transform, "Kinase");
-
-			if (Kinase != null && !myTarget && isActive ) 
+			if(Kinase != null && !myTarget && isActive)
             {
 				delay = 0;
 				Kinase.GetComponent <KinaseCmdCtrl> ().GetObject (this.gameObject, "Kinase_Prep_A");
 				myTarget = Kinase.transform;
 			}
-			if (myTarget && (delay += Time.deltaTime) >= 5) 
+
+			if(myTarget && (delay += Time.deltaTime) >= 5)
             {
 				isActive = false;
 			} 
-			else if ( isActive == true ) 
+
+			else if(isActive == true)
             {
 				Roam.Roaming (this.gameObject);
 			}
-		} 
-        else 
+
+		}
+
+        //ELSE have G-Protein roam
+        else
         {
 			Roam.Roaming (this.gameObject);
 		}
@@ -126,13 +159,14 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 		{
 			//tag left G-Protein for GTP to reference in GTP_CmdCtrl.cs:
 			transform.GetChild(0).tag = "Left"; 
-
-			return myTarget.position + new Vector3 (-2.2f, 0.285f, 0);
+			return myTarget.position + new Vector3 (-2.2f, 0.285f, myTarget.position.z);
 		}
+
 		else
         {
-            return myTarget.position + new Vector3(2.2f, 0.285f, 0);
+            return myTarget.position + new Vector3(2.2f, 0.285f, myTarget.position.z);
         }
+
 	}
 
 /*	LockOn retags the target 'ReceptorPhosphate' to 'target' so it
@@ -142,49 +176,48 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 	private void LockOn()
 	{
 		targeting = true;
-		myTarget.tag = "Target";
-	}
+		myTarget.tag = "Target";   
+    }
 
 /*	ProceedToTarget instructs this object to move towards its 'dockingPosition'
  	If this object gets stuck behind the nucleus, it will need a push to
  	move around the object  */
 	private bool ProceedToTarget()
 	{
-		//Unity manual says if the distance between the two objects is < _speed * Time.deltaTime,
-		//protein position will equal docking...doesn't seem to work, so it's hard coded below
-		transform.position = Vector2.MoveTowards (transform.position, dockingPosition, _speed *Time.deltaTime);
+       
+        //Unity manual says if the distance between the two objects is < _speed * Time.deltaTime,
+        //protein position will equal docking...doesn't seem to work, so it's hard coded below
+        transform.position = Vector2.MoveTowards (transform.position, dockingPosition, _speed *Time.deltaTime);
 
 		if (Vector2.Distance (transform.position, lastPosition) < _speed * Time.deltaTime)
         {
-            Roam.Roaming(this.gameObject);//if I didn't move...I'm stuck.  Give me a push
+            //if I didn't move...I'm stuck.  Give me a push
+            Roam.Roaming(this.gameObject);
         }
-			
-		lastPosition = transform.position;//breadcrumb trail
+      
+		lastPosition = transform.position;      //breadcrumb trail
 
 		//check to see how close to the phosphate and disable collider when close
 		deltaDistance = Vector3.Distance (transform.position, dockingPosition);
 
 		//once in range, station object at docking position
-		if (deltaDistance < _speed * .5f) 
+		if (deltaDistance < _speed * .5f)
         {
-            transform.GetComponent<BoxCollider2D>().enabled = false;
-			transform.GetComponent<Rigidbody2D>().isKinematic = true;
+			transform.GetComponent<BoxCollider2D> ().enabled = false;             
+			transform.GetComponent<Rigidbody2D> ().isKinematic = true;           
 		}
 
 		if (deltaDistance < _speed * Time.deltaTime)
         {
 			transform.position = dockingPosition;
-
-			if (myTarget.GetChild(0).tag == "Left") 
+			if (myTarget.GetChild(0).tag == "Left")
             {
 				//transform.Rotate(180.0f, 0.0f, 0.0f); //orientate protein for docking
 				//transform.Rotate(0.0f, 0.0f,180.0f);
-
 				childGDP.transform.position = childGDP.transform.position - (new Vector3(2.2f, 0.28f, 0.0f) * 2);
 			}
 		}
-
-        return (transform.position == dockingPosition);
+		return (transform.position==dockingPosition);
 	}
 
 /*  Once the G-Protein has docked with a receptor phosphate, it
@@ -213,9 +246,10 @@ public class G_ProteinCmdCtrl : MonoBehaviour
 		myTarget = null;
 		roaming = true;
 		delay = 0;
-	}/* end Undock */
+	}
 
-	public void resetTarget() {
+	public void resetTarget()
+    {
 		isActive = true;
 		myTarget = null;
 		delay = 0;
