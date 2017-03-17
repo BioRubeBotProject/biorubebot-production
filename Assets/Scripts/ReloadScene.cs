@@ -8,7 +8,7 @@ public class ReloadScene : MonoBehaviour
     // Use this for restart models
     public void restartbutton()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level2");
         T_RegCmdCtrl.gameWon = false;
     }
 }

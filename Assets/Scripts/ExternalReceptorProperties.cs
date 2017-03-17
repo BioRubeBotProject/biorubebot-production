@@ -24,6 +24,10 @@ public class ExternalReceptorProperties : MonoBehaviour
                 {
                     child.GetComponent<Renderer>().material.color = NonActiveColor;
                 }
+                else if (child.name == "Right_Receptor")
+                {
+                    child.GetComponent<Renderer>().material.color = NonActiveColor;
+                }
             }
         }
         else
@@ -32,6 +36,10 @@ public class ExternalReceptorProperties : MonoBehaviour
             foreach (Transform child in this.transform)
             {
                 if (child.name == "Receptor Body")
+                {
+                    child.GetComponent<Renderer>().material.color = ActiveColor;
+                }
+                else if (child.name == "Right_Receptor")
                 {
                     child.GetComponent<Renderer>().material.color = ActiveColor;
                 }

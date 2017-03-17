@@ -70,13 +70,19 @@ public class Spawner : MonoBehaviour , Tutorial.SwitchOnOff
   // the camera instead of on the same level.
   void OnMouseDrag()
   {
-    guidePosition = Camera.main.ScreenToWorldPoint 
-      (new Vector3(x, y, spawnedObject.transform.position.z + 1));
+    guidePosition = Camera.main.ScreenToWorldPoint(new Vector3(x, y, spawnedObject.transform.position.z + 1));
+
     if(cellMembrane != null || spawnedObject.name == "Cell Membrane")
     {
-      if(spawnedObject.name == "_ReceptorInactive" ||
-         spawnedObject.name == "NPC") { ThisIsARotatableObject(); }
-      else { transform.position = guidePosition; }    // move the object to the mouse position
+        if (spawnedObject.name == "Right_Receptor_Inactive" || spawnedObject.name == "Left_Receptor_Inactive" || spawnedObject.name == "NPC") 
+        { 
+            ThisIsARotatableObject(); 
+        }
+        else 
+        {
+            // move the object to the mouse position
+            transform.position = guidePosition; 
+        }    
     }
   }
   
