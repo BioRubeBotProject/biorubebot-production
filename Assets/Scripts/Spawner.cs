@@ -74,7 +74,8 @@ public class Spawner : MonoBehaviour , Tutorial.SwitchOnOff
 
     if(cellMembrane != null || spawnedObject.name == "Cell Membrane")
     {
-        if (spawnedObject.name == "Right_Receptor_Inactive" || spawnedObject.name == "Left_Receptor_Inactive" || spawnedObject.name == "NPC") 
+        if (spawnedObject.name == "_ReceptorInactive" || spawnedObject.name == "NPC" || 
+            spawnedObject.name == "Right_Receptor_Inactive" || spawnedObject.name == "Left_Receptor_Inactive") 
         { 
             ThisIsARotatableObject(); 
         }
