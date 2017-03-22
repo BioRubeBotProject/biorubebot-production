@@ -26,6 +26,8 @@ public class ReceptorPathfinding : MonoBehaviour
     private void Raycasting()
     {
         //while (true) {
+
+
         int x = 0;
         myFoundObjs = GameObject.FindGameObjectsWithTag("ExternalReceptor");
         while (x < myFoundObjs.Length && myFoundObjs[x].GetComponent<ExternalReceptorProperties>().isActive == false)
@@ -35,8 +37,10 @@ public class ReceptorPathfinding : MonoBehaviour
 
         int count = myFoundObjs.GetUpperBound(0);
 
-        if (x <= count) {
-			if (myFoundObjs [x].GetComponent<ExternalReceptorProperties> ().isActive == true) {
+        if (x <= count)
+        {
+			if (myFoundObjs [x].GetComponent<ExternalReceptorProperties> ().isActive == true)
+            {
 				//Debug.Log("We found a receptor!");
 				sightStart = myFoundObjs [x].transform;
 				transform.position += transform.up * Time.deltaTime * speed;
