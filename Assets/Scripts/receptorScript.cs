@@ -9,51 +9,57 @@ using UnityEngine;
 
 public class receptorScript : MonoBehaviour
 {
-	#region Public Fields + Properties + Events + Delegates + Enums
-	
-	public GameObject _ActiveReceptor;
-	
-	#endregion Public Fields + Properties + Events + Delegates + Enums
-	
-	#region Private Methods
-	
-	private void OnTriggerEnter2D(Collider2D other)
+
+    public GameObject _ActiveReceptor;
+
+    #region Private Methods
+
+   
+    private void OnTriggerEnter2D(Collider2D other)
 	{
         //test
         Debug.Log("OnTriggerEnter2D -> object name = " + this.gameObject.name);
 
         
-        //IF full receptor (level 1)
+        //IF signal protein collides with full receptor (level 1)
         if(other.gameObject.tag == "ECP" && this.gameObject.name.Equals("_ReceptorInactive(Clone)"))
         {
 			ExternalReceptorProperties objProps = (ExternalReceptorProperties)this.GetComponent("ExternalReceptorProperties");
 			objProps.isActive = false;
 			other.GetComponent<ExtraCellularProperties>().changeState(false);
 			other.GetComponent<Rigidbody2D>().isKinematic = true;
-
-
-
-
+       
 			StartCoroutine(transformReceptor(other));
 		}
 
-        //ELSE IF single receptor (level 2)
+
+
+        //IF signal protein collides with left receptor 
         else if (other.gameObject.tag == "ECP" && this.gameObject.name.Equals("Left_Receptor_Inactive(Clone)"))
         {
+            
             ExternalReceptorProperties objProps = (ExternalReceptorProperties)this.GetComponent("ExternalReceptorProperties");
             objProps.isActive = false;
             other.GetComponent<ExtraCellularProperties>().changeState(false);
             other.GetComponent<Rigidbody2D>().isKinematic = true;
-
-
-
-
-            //StartCoroutine(transformReceptor(other));
+      
+            StartCoroutine(transformLeftReceptor(other));   
         }
+
+
+        //IF right receptor collides with left receptor(with protein signaller)                                                      
+        else if (other.gameObject.tag == "RightReceptor" && this.gameObject.name.Equals("Left_Receptor_Active(Clone)"))
+        {                
+            StartCoroutine(transformLeftReceptorWithProtein(other));         
+        }
+
     }
 
-   
-	
+
+
+
+
+   	//Transforms full receptor after protein signaller collides
 	private IEnumerator transformReceptor(Collider2D other)
 	{
 		yield return new WaitForSeconds(2);
@@ -61,6 +67,36 @@ public class receptorScript : MonoBehaviour
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (NewReceptor);
 		this.gameObject.SetActive(false);
 	}
-	
-	#endregion Private Methods
-}
+
+
+    //Transforms left receptor after protein signaller collides
+    private IEnumerator transformLeftReceptor(Collider2D other)
+    {
+        yield return new WaitForSeconds(2);
+
+        //delete protein signaller
+        Destroy(other.gameObject);
+
+        GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+        GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
+        this.gameObject.SetActive(false);      
+    }
+
+    //Transform left receptor(with protein) after right receptor collides
+    private IEnumerator transformLeftReceptorWithProtein(Collider2D other)
+    {
+             
+        yield return new WaitForSeconds((float) 0.25);
+        other.GetComponent<rightReceptor>().destroyReceptor();
+
+        GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);           
+        GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
+        this.gameObject.SetActive(false);
+
+    }
+
+
+
+
+        #endregion Private Methods
+    }
