@@ -1,11 +1,11 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{7009FEC7-7E7D-8881-7862-8540BBFDD02D}") = "Spring_2017", "Assembly-CSharp-firstpass.csproj", "{51182C3A-040D-9EBB-1F36-5EA3135DC1DB}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring_2017", "Assembly-CSharp-firstpass.csproj", "{51182C3A-040D-9EBB-1F36-5EA3135DC1DB}"
 EndProject
-Project("{7009FEC7-7E7D-8881-7862-8540BBFDD02D}") = "Spring_2017", "Assembly-CSharp.csproj", "{9C30E96F-7210-3386-B4DD-71271F20F5F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring_2017", "Assembly-CSharp.csproj", "{9C30E96F-7210-3386-B4DD-71271F20F5F9}"
 EndProject
-Project("{7009FEC7-7E7D-8881-7862-8540BBFDD02D}") = "Spring_2017", "Assembly-CSharp-Editor.csproj", "{FF40A8DC-49A7-A64E-2D02-FBCB544CD68F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring_2017", "Assembly-CSharp-Editor.csproj", "{FF40A8DC-49A7-A64E-2D02-FBCB544CD68F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
