@@ -11,10 +11,9 @@ public class receptorScript : MonoBehaviour
 {
 
     public GameObject _ActiveReceptor;
-
+    
     #region Private Methods
 
-   
     private void OnTriggerEnter2D(Collider2D other)
 	{
         //test
@@ -87,16 +86,16 @@ public class receptorScript : MonoBehaviour
     {
              
         yield return new WaitForSeconds((float) 0.25);
-        other.GetComponent<rightReceptor>().destroyReceptor();
+        other.GetComponent<receptorMovement>().destroyReceptor();
 
         GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);           
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
         this.gameObject.SetActive(false);
 
+        Destroy(this.gameObject);  
     }
 
 
+    #endregion Private Methods
 
-
-        #endregion Private Methods
-    }
+}

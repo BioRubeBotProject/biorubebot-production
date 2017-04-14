@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ReceptorLegProperties : MonoBehaviour {
+public class ReceptorLegProperties : MonoBehaviour
+{
 
 	#region Public Fields + Properties + Events + Delegates + Enums
 	
@@ -52,7 +53,8 @@ public class ReceptorLegProperties : MonoBehaviour {
 
 	private void Update()
 	{
-		if (this.isActive == false) {
+		if (this.isActive == false)
+        {
 			this.allowMovement = false;
 			foreach (Transform child in this.transform)
 			{
@@ -63,7 +65,9 @@ public class ReceptorLegProperties : MonoBehaviour {
 			}
 			this.GetComponent<ReceptorLegScript>().enabled = false;
 		}
-		if (this.isActive == true) {
+
+		if (this.isActive == true)
+        {
 			this.allowMovement = true;
 			foreach (Transform child in this.transform)
 			{

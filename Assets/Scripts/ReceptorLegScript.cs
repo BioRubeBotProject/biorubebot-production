@@ -21,7 +21,8 @@ using System.Collections;
 //Line 44:  Added call to IEnumerator co-routine 'Explode'
 //Lines 47-65:  Added 'Explode' to destroy ATP after dropping phosphate at the receptor
 
-public class ReceptorLegScript : MonoBehaviour {
+public class ReceptorLegScript : MonoBehaviour
+{
   
   public ParticleSystem destructionEffect;
   
@@ -48,10 +49,15 @@ public class ReceptorLegScript : MonoBehaviour {
       //if it is a left phosphate, G-protein must rotate to dock
       //NOTE: EACH PHOSPHATE ATTACHED TO A RECEPTOR IS NOW TAGGED AS "receptorPhosphate"
       tail.transform.tag = "ReceptorPhosphate";
-      if (transform.name == "_InnerReceptorFinalLeft") { tail.transform.GetChild(0).tag = "Left"; }
+      if (transform.name == "_InnerReceptorFinalLeft")
+      {
+          tail.transform.GetChild(0).tag = "Left";
+      }
+
       StartCoroutine(Explode (other.gameObject)); //self-destruct after 3 seconds
     }
   }
+
   private IEnumerator Explode(GameObject other)
   {
     yield return new WaitForSeconds (3f);
@@ -70,4 +76,5 @@ public class ReceptorLegScript : MonoBehaviour {
     //destroy our game object
     Destroy(other.gameObject);
   }
+
 }
