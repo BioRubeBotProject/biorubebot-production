@@ -11,6 +11,7 @@ public class receptorScript : MonoBehaviour
 {
 
     public GameObject _ActiveReceptor;
+	public GameObject parentObject;
     
     #region Private Methods
 
@@ -19,6 +20,7 @@ public class receptorScript : MonoBehaviour
         //test
         Debug.Log("OnTriggerEnter2D -> object name = " + this.gameObject.name);
 
+		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
         
         //IF signal protein collides with full receptor (level 1)
         if(other.gameObject.tag == "ECP" && this.gameObject.name.Equals("_ReceptorInactive(Clone)"))
@@ -63,6 +65,7 @@ public class receptorScript : MonoBehaviour
 	{
 		yield return new WaitForSeconds(2);
 		GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+		NewReceptor.transform.parent = parentObject.transform;
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (NewReceptor);
 		this.gameObject.SetActive(false);
 	}
@@ -77,6 +80,7 @@ public class receptorScript : MonoBehaviour
         Destroy(other.gameObject);
 
         GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+		NewReceptor.transform.parent = parentObject.transform;
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
         this.gameObject.SetActive(false);      
     }
@@ -88,7 +92,8 @@ public class receptorScript : MonoBehaviour
         yield return new WaitForSeconds((float) 0.25);
         other.GetComponent<receptorMovement>().destroyReceptor();
 
-        GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);           
+        GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+		NewReceptor.transform.parent = parentObject.transform;
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
         this.gameObject.SetActive(false);
 

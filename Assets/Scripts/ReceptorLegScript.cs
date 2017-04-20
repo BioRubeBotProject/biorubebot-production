@@ -25,6 +25,7 @@ public class ReceptorLegScript : MonoBehaviour
 {
   
   public ParticleSystem destructionEffect;
+	public GameObject parentObject;
   
   private IEnumerator OnTriggerEnter2D(Collider2D other)
   {
@@ -37,6 +38,8 @@ public class ReceptorLegScript : MonoBehaviour
       other.GetComponent<CircleCollider2D>().enabled = false;
       other.GetComponent<ATPproperties>().changeState(false);
       other.GetComponent<ATPproperties>().dropOff(transform.name);
+
+	  parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
       
       yield return new WaitForSeconds(3);
       Transform tail = other.transform.FindChild ("Tail");
@@ -64,6 +67,8 @@ public class ReceptorLegScript : MonoBehaviour
     //Instantiate our one-off particle system
     ParticleSystem explosionEffect = Instantiate(destructionEffect) as ParticleSystem;
     explosionEffect.transform.position = other.transform.position;
+
+	explosionEffect.transform.parent = parentObject.transform;
     
     //play it
     explosionEffect.loop = false;

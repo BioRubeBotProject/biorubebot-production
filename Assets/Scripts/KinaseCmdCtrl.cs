@@ -6,6 +6,7 @@ public class KinaseCmdCtrl : MonoBehaviour, Roam.CollectObject
 	private GameObject active_G_Protein;
 	private GameObject T_Reg;
 	public GameObject Kinase_P2;
+	public GameObject parentObject;
 	private Transform myTarget;
 	private Vector3 midpoint;
 	private bool[] midpointAchieved = new bool[2];
@@ -23,6 +24,7 @@ public class KinaseCmdCtrl : MonoBehaviour, Roam.CollectObject
 		active_G_Protein = null;
 		delay = 0.0f;
 		timeoutForInteraction = 0.0f;
+		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
 	}
 	
 	// Update is called once per frame
@@ -53,20 +55,28 @@ public class KinaseCmdCtrl : MonoBehaviour, Roam.CollectObject
 				Roam.Roaming (this.gameObject);
 			}
 			timeoutForInteraction += Time.deltaTime;
-		} else if (tag == "Kinase_Prep_C") {
-			if(!midpointAchieved [0] || !midpointAchieved [1]){
+		} 
+		else if (tag == "Kinase_Prep_C") 
+		{
+			if(!midpointAchieved [0] || !midpointAchieved [1])
+			{
 				midpointAchieved[0] = Roam.ProceedToVector(active_G_Protein,midpoint + new Vector3(0.0f,0.85f,0.0f)); //these values to be changed 
 				midpointAchieved[1] = Roam.ProceedToVector(this.gameObject,midpoint + new Vector3(0.0f,-0.85f,0.0f)); //for snapping kinase to gprotein
 			}
-			if(midpointAchieved[0] && midpointAchieved[1]) {
-				if((delay += Time.deltaTime) >= 3) {
+			if(midpointAchieved[0] && midpointAchieved[1]) 
+			{
+				if((delay += Time.deltaTime) >= 3) 
+				{
 					GameObject obj = Instantiate(Kinase_P2,gameObject.transform.position, Quaternion.identity) as GameObject;
-          GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (obj);
+					obj.transform.parent = parentObject.transform;
+          			GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (obj);
 					active_G_Protein.GetComponent<G_ProteinCmdCtrl>().resetTarget();
 					Destroy (gameObject);
 				}
-				else {
-					if(this.gameObject.transform.parent == null ){
+				else 
+				{
+					if(this.gameObject.transform.parent.parent == null)
+					{
 						this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
 						this.gameObject.GetComponent<PolygonCollider2D>().enabled = false;
 						this.gameObject.transform.parent = active_G_Protein.transform;

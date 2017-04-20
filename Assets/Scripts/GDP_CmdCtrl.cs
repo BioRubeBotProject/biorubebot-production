@@ -5,11 +5,12 @@ public class GDP_CmdCtrl : MonoBehaviour
 {
 
 	public ParticleSystem destructionEffect;	// 'poof' special effect for 'expended' GDP
+	public GameObject parentObject;
 
 	// Use this for initialization
 	void Start ()
     {
-	
+		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
 	}
 	
 	// Update is called once per frame
@@ -29,7 +30,7 @@ public class GDP_CmdCtrl : MonoBehaviour
 	public IEnumerator ReleasingGDP ()
 	{
 		yield return new WaitForSeconds (3f);
-		transform.parent = null;
+		transform.parent = parentObject.transform;
 		transform.GetComponent<Rigidbody2D> ().isKinematic = false;
 		transform.GetComponent<CircleCollider2D> ().enabled = true;
 	} 
@@ -39,6 +40,7 @@ public class GDP_CmdCtrl : MonoBehaviour
 	{
 		yield return new WaitForSeconds (6f);
 		ParticleSystem explosionEffect = Instantiate(destructionEffect) as ParticleSystem;
+		explosionEffect.transform.parent = parentObject.transform;
 		explosionEffect.transform.position = transform.position;
 		explosionEffect.loop = false;
 		explosionEffect.Play();

@@ -80,17 +80,6 @@ public class G_ProteinCmdCtrl : MonoBehaviour
                 myTarget = openTarget.transform;
 				dockingPosition = GetOffset ();
 				LockOn ();  //call dibs
-
-
-
-
-
-
-
-
-
-
-
 			}
 
 		}

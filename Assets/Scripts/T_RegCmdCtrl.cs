@@ -26,6 +26,8 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 	private float timeoutForInteraction;
 	private Vector3 ingressDistance;
 	private GameObject Nucleus;
+	private GameObject parentObject;
+
 	
 	// Use this for initialization
 	void Start () {
@@ -39,6 +41,7 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 		delay = 0.0f;
 		timeoutForInteraction = 0.0f;
 		Nucleus = GameObject.FindGameObjectWithTag("CellMembrane").transform.GetChild(0).gameObject;
+		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
 	}
 	
 	// Update is called once per frame
@@ -114,7 +117,7 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 			// Check if the midpoint has been achieved
 			if (midpointAchieved [0] && midpointAchieved [1]) {
 				// Check if the kinase has a parent
-				if (active_Kinase_P2.gameObject.transform.parent == null) {
+				if (active_Kinase_P2.gameObject.transform.parent.parent == null) {
 					// Set the kinase's parent to be this T_Reg
 					active_Kinase_P2.transform.parent = this.gameObject.transform;
 					
@@ -184,7 +187,7 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 					
 					// Reset the Kinase back to Kinase_Phase_2, when it was looking for a T_Reg
 					active_Kinase_P2.GetComponent<Rigidbody2D> ().isKinematic = false;
-					active_Kinase_P2.transform.parent = null;
+					active_Kinase_P2.transform.parent = parentObject.transform;
 					active_Kinase_P2.GetComponent<KinaseCmdCtrl> ().reset ();
 					active_Kinase_P2.tag = "Kinase_Phase_2";
 					active_Kinase_P2 = null;
@@ -296,6 +299,8 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 		yield return new WaitForSeconds (3f);
 		//Instantiate our one-off particle system
 		ParticleSystem explosionEffect = Instantiate(destructionEffect) as ParticleSystem;
+		explosionEffect.transform.parent = parentObject.transform;
+
 		explosionEffect.transform.position = other.transform.position;
 		
 		//play it
