@@ -26,6 +26,8 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 	private float timeoutForInteraction;
 	private Vector3 ingressDistance;
 	private GameObject Nucleus;
+
+    //Parent object used for unity editor Tree Hierarchy
 	private GameObject parentObject;
 
 	
@@ -41,6 +43,8 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 		delay = 0.0f;
 		timeoutForInteraction = 0.0f;
 		Nucleus = GameObject.FindGameObjectWithTag("CellMembrane").transform.GetChild(0).gameObject;
+
+        //Get reference for parent object in UnityEditor
 		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
 	}
 	
@@ -187,6 +191,7 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 					
 					// Reset the Kinase back to Kinase_Phase_2, when it was looking for a T_Reg
 					active_Kinase_P2.GetComponent<Rigidbody2D> ().isKinematic = false;
+                    //Sets curent object to be under the parent object.
 					active_Kinase_P2.transform.parent = parentObject.transform;
 					active_Kinase_P2.GetComponent<KinaseCmdCtrl> ().reset ();
 					active_Kinase_P2.tag = "Kinase_Phase_2";
@@ -299,6 +304,7 @@ public class T_RegCmdCtrl : MonoBehaviour, Roam.CollectObject {
 		yield return new WaitForSeconds (3f);
 		//Instantiate our one-off particle system
 		ParticleSystem explosionEffect = Instantiate(destructionEffect) as ParticleSystem;
+        //Sets curent object to be under the parent object.
 		explosionEffect.transform.parent = parentObject.transform;
 
 		explosionEffect.transform.position = other.transform.position;

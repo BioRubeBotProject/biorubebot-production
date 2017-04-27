@@ -25,7 +25,9 @@ public class ReceptorLegScript : MonoBehaviour
 {
   
   public ParticleSystem destructionEffect;
-	public GameObject parentObject;
+
+  //Parent object used for unity editor Tree Hierarchy
+  public GameObject parentObject;
   
   private IEnumerator OnTriggerEnter2D(Collider2D other)
   {
@@ -39,6 +41,7 @@ public class ReceptorLegScript : MonoBehaviour
       other.GetComponent<ATPproperties>().changeState(false);
       other.GetComponent<ATPproperties>().dropOff(transform.name);
 
+      //Get reference for parent object in UnityEditor
 	  parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
       
       yield return new WaitForSeconds(3);
@@ -68,6 +71,7 @@ public class ReceptorLegScript : MonoBehaviour
     ParticleSystem explosionEffect = Instantiate(destructionEffect) as ParticleSystem;
     explosionEffect.transform.position = other.transform.position;
 
+    //Sets explosion effect to be under the parent object.
 	explosionEffect.transform.parent = parentObject.transform;
     
     //play it

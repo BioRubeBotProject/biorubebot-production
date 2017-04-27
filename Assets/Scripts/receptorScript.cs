@@ -11,6 +11,8 @@ public class receptorScript : MonoBehaviour
 {
 
     public GameObject _ActiveReceptor;
+
+    //Parent object used for unity editor Tree Hierarchy
 	public GameObject parentObject;
     
     #region Private Methods
@@ -20,6 +22,7 @@ public class receptorScript : MonoBehaviour
         //test
         Debug.Log("OnTriggerEnter2D -> object name = " + this.gameObject.name);
 
+        //Get reference for parent object in UnityEditor
 		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
         
         //IF signal protein collides with full receptor (level 1)
@@ -65,6 +68,8 @@ public class receptorScript : MonoBehaviour
 	{
 		yield return new WaitForSeconds(2);
 		GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+
+        //Sets newReceptor to be under the parent object.
 		NewReceptor.transform.parent = parentObject.transform;
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (NewReceptor);
 		this.gameObject.SetActive(false);
@@ -80,6 +85,8 @@ public class receptorScript : MonoBehaviour
         Destroy(other.gameObject);
 
         GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+
+        //Sets newReceptor to be under the parent object.
 		NewReceptor.transform.parent = parentObject.transform;
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
         this.gameObject.SetActive(false);      
@@ -93,6 +100,8 @@ public class receptorScript : MonoBehaviour
         other.GetComponent<receptorMovement>().destroyReceptor();
 
         GameObject NewReceptor = (GameObject)Instantiate(_ActiveReceptor, transform.position, transform.rotation);
+
+        //Sets newReceptor to be under the parent object.
 		NewReceptor.transform.parent = parentObject.transform;
         GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add(NewReceptor);
         this.gameObject.SetActive(false);

@@ -26,7 +26,7 @@ public class Spawner : MonoBehaviour , Tutorial.SwitchOnOff
   Transform nucleus;                  // the nucleus (child) of the cellMembrane
   Vector3 ReturnLocation;             // original location of the "button"
   Quaternion ReturnRotation;          // orginal rotaion of the "button"
-	public GameObject parentObject;
+  public GameObject parentObject;     //Parent object used for unity editor Tree Hierarchy
   
   //------------------------------------------------------------------------------------------------
   // This is called once per frame. 
@@ -53,6 +53,8 @@ public class Spawner : MonoBehaviour , Tutorial.SwitchOnOff
     ReturnLocation = transform.position;
     ReturnRotation.eulerAngles = transform.eulerAngles;
     cellMembrane = GameObject.FindGameObjectWithTag ("CellMembrane");
+
+    //Get reference for parent object in UnityEditor
 	parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
     if(cellMembrane != null) 
     { 
@@ -98,6 +100,8 @@ public class Spawner : MonoBehaviour , Tutorial.SwitchOnOff
     {
       spawnLocation = transform.position;
 	  GameObject obj = Instantiate (spawnedObject, spawnLocation, Quaternion.Euler(0f, 0f, degrees)) as GameObject;
+
+      //Sets curent object to be under the parent object.
 	  obj.transform.parent = parentObject.transform;
       GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (obj);
       obj = GameObject.FindGameObjectWithTag("CellMembraneButton") as GameObject;

@@ -6,7 +6,7 @@ public class KinaseCmdCtrl : MonoBehaviour, Roam.CollectObject
 	private GameObject active_G_Protein;
 	private GameObject T_Reg;
 	public GameObject Kinase_P2;
-	public GameObject parentObject;
+    public GameObject parentObject; //Parent object used for unity editor Tree Hierarchy
 	private Transform myTarget;
 	private Vector3 midpoint;
 	private bool[] midpointAchieved = new bool[2];
@@ -24,7 +24,7 @@ public class KinaseCmdCtrl : MonoBehaviour, Roam.CollectObject
 		active_G_Protein = null;
 		delay = 0.0f;
 		timeoutForInteraction = 0.0f;
-		parentObject = GameObject.FindGameObjectWithTag ("MainCamera");
+        parentObject = GameObject.FindGameObjectWithTag("MainCamera"); //Get reference for parent object in UnityEditor
 	}
 	
 	// Update is called once per frame
@@ -68,7 +68,7 @@ public class KinaseCmdCtrl : MonoBehaviour, Roam.CollectObject
 				if((delay += Time.deltaTime) >= 3) 
 				{
 					GameObject obj = Instantiate(Kinase_P2,gameObject.transform.position, Quaternion.identity) as GameObject;
-					obj.transform.parent = parentObject.transform;
+                    obj.transform.parent = parentObject.transform; //Sets curent object to be under the parent object.
           			GameObject.Find("EventSystem").GetComponent<ObjectCollection>().Add (obj);
 					active_G_Protein.GetComponent<G_ProteinCmdCtrl>().resetTarget();
 					Destroy (gameObject);
